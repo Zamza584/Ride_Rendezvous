@@ -1,5 +1,4 @@
-const db = require("../models/index");
-const personSchema = db.person;
+const personSchema = require("../models/person");
 
 const getAll = async (req, res) => {
     try {
@@ -22,7 +21,7 @@ const getSpecific = async (req, res) => {
 
 const postPerson = async (req, res) => {
     try {
-        const users = personSchema({
+        let users = await personSchema({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
@@ -31,8 +30,8 @@ const postPerson = async (req, res) => {
             state: req.body.state,
         });
         const data = await users.save();
-        res.json({ message: "congratulations you created a new user", date: data });
-    } catch {
+        res.json({ message: "congratulations you created a new user", userData: data });
+    } catch (err){
         res.status(400).json({ message: err });
     }
 };
